@@ -21,6 +21,8 @@ class MerkleTree
   end
 
   def finish
+    return if @blocks.empty?
+
     if (@blocks.length > 0)
       @nodes << Node.new(Digest::SHA1.hexdigest(@blocks.join()))
     end
@@ -41,7 +43,7 @@ class MerkleTree
   end
 
   def output
-    @root.output
+    @root.output if @root
     reset
   end
 
@@ -112,7 +114,7 @@ class MerkleTree
   end
 end
 
-BLOCK_SIZE = 32
+BLOCK_SIZE = 1024
 mt = MerkleTree.new(BLOCK_SIZE)
 ARGF.each { |line| mt.add_line(line) }
 mt.finish
